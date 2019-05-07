@@ -6,21 +6,22 @@
 using namespace std;
 
 inline getRandom(int n){
-return (rand() % n);
+	return (rand() % n);
 }
+
 
 /* el quickUnion crea graella NxN amb caselles tancades*/
 Percolacio::Percolacio(int n){
-qu = new QuickUnion(n);
+	qu = new QuickUnion(n);
 }
  /* eliminar graella */
 Percolacio::~Percolacio() {
-delete qu;
+	delete qu;
 }
 
 /* obrir una casella (i unir-la amb les obertes del seu
  entorn immediat */
-bool Percolation::open(int row, int col) {
+bool Percolacio::obrir(int row, int col) {
 	bool obre = false;
     // row-> j & col->i
     if (isOpen(row, col))
@@ -53,56 +54,53 @@ bool Percolation::open(int row, int col) {
 
 /* la casella està oberta? */
 bool Percolacio::isOpen(int f, int c) {
-return qu->grid[f][c].open;
+	return qu->grid[f][c].open;
 }
 
 /* casella oberta està plena si pot ser connectada a una altra
  d'oberta de la fila de dalt de tot
 */
 bool Percolacio::isFull(int f, int c){
-return qu->isConnected(qu->grid[f][c].id, 0);
+	return qu->isConnected(qu->grid[f][c].id, 0);
 }
 
 /* hi ha alguna casella de la fila de baix de tot connectada a la 
  primera fila? (afirmatiu-> sistema percola) */
 bool Percolacio::percolates(){
-for(int i = 0; i < qu->count; i++){
-if(qu->isConnected(qu->grid[qu->count - 1][i].id,0)) return true;
-}
-return false;
+	for(int i = 0; i < qu->count; i++){
+		if(qu->isConnected(qu->grid[qu->count - 1][i].id,0)) return true;
+	}
+	return false;
 }
 
 
 int main(int argc, char *argv[]){
 
-if (argc < 2) {
-cout << "Massa pocs arguments>> endl;
-return -1;
-}
+	if (argc < 2) {
+		cout << "Massa pocs arguments " << endl;
+		return -1;
+	}
+	/*
+	REPETIR EL SEGÜENT PROCEDIMENT (per obtenir un valor mitjà del llindar):
+	1. inicialment, totes les caselles tancades
+	2. escollir casella random (parametres i,j)
+	3. obrir-la
+	4. sistema percola? (negatiu: tornem a punt 2)
+	5. la fracció de caselles obertes (respecte les totals) estima el llindar 
+	*/
+	int size = atoi(argv[1]);
 
-/*
-REPETIR EL SEGÜENT PROCEDIMENT (per obtenir un valor mitjà del llindar):
-1. inicialment, totes les caselles tancades
-2. escollir casella random (parametres i,j)
-3. obrir-la
-4. sistema percola? (negatiu: tornem a punt 2)
-5. la fracció de caselles obertes (respecte les totals) estima el llindar 
-*/
+	p = Percolacio(size);
+	int obertes = 0;
+	int i, j;
 
-int size = atoi(argv[1]);
-
-Percolacio p(size);
-int obertes = 0;
-int i, j;
-
-bool obre;
-while(!p.percolates()) {
-i = getRandom(size);
-j = getRandom(size);
-obre = p.obrir(i,j);
-if(obre) obertes++;
-}
-
-cout << "El sistema percola amb el llindar " << float(llindar)/float(size*size) << endl;
+	bool obre;
+	while(!p.percolates()) {
+		i = getRandom(size);
+		j = getRandom(size);
+		obre = p.obrir(i,j);
+		if(obre) obertes++;
+	}
+	cout << "El sistema percola amb el llindar " << float(obertes)/float(size*size) << endl;
 
 }

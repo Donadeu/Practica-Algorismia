@@ -8,19 +8,19 @@ struct Site {
     std::size_t id; // parent
 };
 
-typedef std::vector<std::vector<Site>>   Matrix2D;
+typedef std::vector< std::vector<Site> > Matrix2D;
 
 class QuickUnion {
+     Matrix2D grid;
+     int mida;
 public:
-    QuickUnion(const int N);
+    QuickUnion(int N);
 
     bool isConnected(int p, int q);
     void Union(int p, int q);
-    int Root(int p);
-
+    int root(int p);
+    Site getSite(int x, int y);
     virtual ~QuickUnion(){ }
-
-    Matrix2D grid;
 };
 
 #endif  /* QUICKUNION_H */
