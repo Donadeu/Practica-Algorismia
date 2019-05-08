@@ -2,7 +2,7 @@
 #include <random>
 #include <iostream>
 #include <vector>
-#include "QuickUnion.h"
+#include "quickUnion.h"
 
 using namespace std;
 
@@ -38,7 +38,6 @@ Site QuickUnion::getSite(int x, int y){
 int QuickUnion::root(int p){
 	int x = (int)p / mida;
 	int y = p % mida;
-	cout << "eix x i y: " << x << " " << y << endl;
 	while(p != this->grid[x][y].id) p = this->grid[x][y].id;
 	return p;
 }
