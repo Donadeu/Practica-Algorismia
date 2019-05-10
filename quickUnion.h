@@ -14,8 +14,9 @@ class QuickUnion {
      Matrix2D grid;
      int mida;
 public:
+    QuickUnion();
     QuickUnion(int N);
-
+    void setOpen(int i, int j, bool b);
     bool isConnected(int p, int q);
     void Union(int p, int q);
     int root(int p);

@@ -29,14 +29,14 @@ QuickUnion Percolacio::getQu(){
 	return this->qu;
 }
 
+
 /* obrir una casella (i unir-la amb les obertes del seu
  entorn immediat */
 bool Percolacio::obrir(int row, int col) {
 	bool obre = false;
     // row-> j & col->i
     if (isOpen(row, col)) return obre;
-
-    qu.getSite(row, col).open = true;
+	qu.setOpen(row, col, true);
 	obre = true;
     auto current_site_id = qu.getSite(row, col).id; // casella just oberta
 

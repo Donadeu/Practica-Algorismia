@@ -6,7 +6,7 @@
 inline std::size_t getRandom(std::size_t N);
 
 class Percolacio {
-QuickUnion qu;
+QuickUnion qu = QuickUnion();
   public:
        Percolacio(int N);                  // create n-by-n grid, with all sites blocked
        bool obrir(int row, int col);         // open site (row, col) if it is not open already

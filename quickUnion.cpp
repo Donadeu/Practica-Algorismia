@@ -6,6 +6,10 @@
 
 using namespace std;
 
+QuickUnion::QuickUnion(){
+	
+}
+
 QuickUnion::QuickUnion( int N){
 	Matrix2D gridaux(N, vector<Site>(N));
 	// crear graella NxN: totes caselles tancades, ids corresponents
@@ -25,6 +29,13 @@ QuickUnion::QuickUnion( int N){
 		}
 	}
 	this->grid = gridaux;
+}
+
+void QuickUnion::setOpen(int i, int j, bool b){
+	Site aux;
+	aux.open = b;
+	aux.id = getSite(i, j).id;
+	this->grid[i][j] = aux;
 }
 
 bool QuickUnion::isConnected(int id1, int id2){
