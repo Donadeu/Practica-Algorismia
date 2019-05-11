@@ -107,10 +107,7 @@ float percolation(Graph &g, int n){
      * 4. Afirmatiu: anar al pas 1
      * 5. Negatiu: retornar nombre d'arestes eliminades
      * */
-    
-    int ori, des; // origen i destí
-    ori = 0;
-    des = n-1;
+ 
     
     float count = 0; // arestes eliminades
     bool connectats = true;
