@@ -1,6 +1,8 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <time.h>
+#include <ctime>
 #include <cstdlib>
 #include "apartatB.h"
 #include "quickUnion.h"
@@ -82,7 +84,7 @@ bool Percolacio::percolates(){
 	return false;
 }
 
-/*
+
 int main(int argc, char *argv[]){
 
 	if (argc < 2) {
@@ -95,21 +97,24 @@ int main(int argc, char *argv[]){
 	2. escollir casella random (parametres i,j)
 	3. obrir-la
 	4. sistema percola? (negatiu: tornem a punt 2)
-	5. la fracció de caselles obertes (respecte les totals) estima el llindar 
+	5. la fracció de caselles obertes (respecte les totals) estima el llindar */
 	
 	int size = atoi(argv[1]);
 
-	p = Percolacio(size);
+	Percolacio p = Percolacio(size);
 	int obertes = 0;
 	int i, j;
-
+	int iteracions = 0;
+	srand(time(0));
+	
 	bool obre;
 	while(!p.percolates()) {
+		iteracions++;
 		i = getRandom(size);
 		j = getRandom(size);
 		obre = p.obrir(i,j);
 		if(obre) obertes++;
 	}
-	cout << "El sistema percola amb el llindar " << float(obertes)/float(size*size) << endl;
+	cout << "El sistema percola amb el llindar " << float(obertes)/float(size*size) << " el bucle ha realitzat " << iteracions << " iteracions" << endl;
 
-}*/
+}
