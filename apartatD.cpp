@@ -103,7 +103,7 @@ float percolation(Graph &g, int n){
     /*
      * 1. Trio aresta random
      * 2. L'elimino (incrementar comptador)
-     * 3. Graf percola? (node origen i destí al mateix component connex)
+     * 3. Graf segueix sent connex? (mirem si les 2 arestes eliminades són reachable)
      * 4. Afirmatiu: anar al pas 1
      * 5. Negatiu: retornar nombre d'arestes eliminades
      * */
@@ -135,13 +135,15 @@ float percolation(Graph &g, int n){
 int main(){
     
     auto start = std::chrono::system_clock::now();
-
+	cout << "Introdueix el número de nodes del graf total" << endl;
     int n; // num nodes
     cin >> n;
     float a = n*(n-1); // arestes totals
     
     Graph g(n);
     complete_graph(g,n);
+    
+    cout << "Graf generat: " << endl;
     
     g.printGraph();
     
@@ -152,6 +154,6 @@ int main(){
     
     cout << "arestes eliminades: " << p << endl;
     cout << "fraccio 1-p: " << setprecision(4) << p/a << endl;
-    cout << "temps d'execució: " << time.count() << "segons" << endl;
+    cout << "temps d'execució: " << time.count() << " segons" << endl;
     
 }
