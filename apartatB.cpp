@@ -87,7 +87,7 @@ bool Percolacio::percolates(){
 
 int main(int argc, char *argv[]){
 
-	if (argc < 2) {
+	if (argc < 3) {
 		cout << "Massa pocs arguments " << endl;
 		return -1;
 	}
@@ -100,21 +100,33 @@ int main(int argc, char *argv[]){
 	5. la fracció de caselles obertes (respecte les totals) estima el llindar */
 	
 	int size = atoi(argv[1]);
-
+	int repeticions = atoi(argv[2]);
 	Percolacio p = Percolacio(size);
 	int obertes = 0;
 	int i, j;
 	int iteracions = 0;
+	float iteracions_avg = 0;
 	srand(time(0));
-	
+	float llindar = 0;
+	float llindar_avg = 0; 
 	bool obre;
-	while(!p.percolates()) {
-		iteracions++;
-		i = getRandom(size);
-		j = getRandom(size);
-		obre = p.obrir(i,j);
-		if(obre) obertes++;
+	for (int i = 0; i < repeticions; ++i){
+		iteracions = 0;
+		obertes = 0;
+		p = Percolacio(size);
+		while(!p.percolates()) {
+			iteracions++;
+			i = getRandom(size);
+			j = getRandom(size);
+			obre = p.obrir(i,j);
+			if(obre) obertes++;
+		}
+		llindar = float(obertes)/float(size*size);
+		llindar_avg += llindar;
+		iteracions_avg += iteracions;
 	}
-	cout << "El sistema percola amb el llindar " << float(obertes)/float(size*size) << " el bucle ha realitzat " << iteracions << " iteracions" << endl;
+	llindar_avg = llindar_avg / float(repeticions);
+	iteracions_avg = iteracions_avg / float(repeticions);
+	cout << "Després de " << repeticions << " execucions, el sistema percola de mitjana amb el llindar " << llindar_avg << " el bucle ha realitzat de mitjana " << iteracions_avg << " iteracions" << endl;
 
 }
