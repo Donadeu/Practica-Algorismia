@@ -14,6 +14,7 @@
 #include <chrono>
 using namespace std;
 
+int iteracions = 0;
 
 class Graph{
     int n;
@@ -24,7 +25,7 @@ public:
     void addEdge(int v, int w);
     void deleteEdge(int v, int w);
     bool edgeExists(int v, int w);
-    bool isReachable(int s, int d);
+    bool BFS(int s);
     void printGraph();
 };
 
@@ -49,9 +50,8 @@ bool Graph::edgeExists(int v, int w){
 }
 
 
-bool Graph::isReachable(int s, int d){
+bool Graph::BFS(int s){
     // cas base
-    if(s == d) return true;
     
     bool *visited = new bool[n];
     for(int i = 0; i < n; i++) visited[i] = false;
@@ -67,14 +67,15 @@ bool Graph::isReachable(int s, int d){
         s = queue.front();
         queue.pop_front();
         for(i = adj[s].begin(); i != adj[s].end(); ++i){
-            if(*i == d) return true;
+			++iteracions;
             if(!visited[*i]){
                 visited[*i] = true;
                 queue.push_back(*i);
             }
         }
     }
-    return false;
+    for (int j = 0; j < n; j++) if (!visited[j]) return false;
+    return true;
 }
 
 
@@ -107,40 +108,42 @@ float percolation(Graph &g, int n){
      * 4. Afirmatiu: anar al pas 1
      * 5. Negatiu: retornar nombre d'arestes eliminades
      * */
- 
-    
+
     float count = 0; // arestes eliminades
-    bool connectats = true;
     int v, w;
     
     srand(time(0));
     bool connex = true;
-    while(connex){
+    while(connex){		
 		v = rand()%n;
 		w = rand()%n;
     // comprovar que aresta existeix
 		if(v != w and g.edgeExists(v,w)) {
 			g.deleteEdge(v,w);
 			++count;
-			connex = g.isReachable(v, w);
+			connex = g.BFS(v);
 		}		
     }
     return count;
 }
     
 
-int main(){
+int main(int argc, char *argv[]){
+    
+    if (argc < 2) {
+		cout << "Massa pocs arguments " << endl;
+		return -1;
+	}
     
     auto start = std::chrono::system_clock::now();
-	cout << "Introdueix el número de nodes del graf total" << endl;
-    int n; // num nodes
-    cin >> n;
+
+    int n = atoi(argv[1]);
     float a = n*(n-1); // arestes totals
     
     Graph g(n);
     complete_graph(g,n);
     
-    cout << "Graf generat: " << endl;
+     cout << "Graf generat: " << endl;
     
     g.printGraph();
     
@@ -150,7 +153,8 @@ int main(){
     std::chrono::duration<double> time = end - start;
     
     cout << "arestes eliminades: " << p << endl;
-    cout << "fraccio 1-p: " << setprecision(4) << p/a << endl;
+    cout << "fraccio 1-p: " << setprecision(4) << p/a << endl;    
     cout << "temps d'execució: " << time.count() << " segons" << endl;
+    cout << "Número d'iteracions de la funció percolation: " << iteracions << endl;
     
 }
