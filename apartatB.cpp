@@ -88,7 +88,7 @@ bool Percolacio::percolates(){
 
 int main(int argc, char *argv[]){
 
-	if (argc < 3) {
+	if (argc < 2) {
 		cout << "Massa pocs arguments " << endl;
 		return -1;
 	}
@@ -103,7 +103,6 @@ int main(int argc, char *argv[]){
 	auto start = std::chrono::system_clock::now();
 	
 	int size = atoi(argv[1]);
-	int repeticions = atoi(argv[2]);
 	Percolacio p = Percolacio(size);
 	int obertes = 0;
 	int i, j;
@@ -113,28 +112,22 @@ int main(int argc, char *argv[]){
 	float llindar = 0;
 	float llindar_avg = 0; 
 	bool obre;
-	for (int i = 0; i < repeticions; ++i){
-		iteracions = 0;
-		obertes = 0;
-		p = Percolacio(size);
-		while(!p.percolates()) {
-			iteracions++;
-			i = getRandom(size);
-			j = getRandom(size);
-			obre = p.obrir(i,j);
-			if(obre) obertes++;
-		}
-		llindar = float(obertes)/float(size*size);
-		llindar_avg += llindar;
-		iteracions_avg += iteracions;
+
+	iteracions = 0;
+	while(!p.percolates()) {
+		iteracions++;
+		i = getRandom(size);
+		j = getRandom(size);
+		obre = p.obrir(i,j);
+		if(obre) obertes++;
 	}
+	
+	llindar = float(obertes)/float(size*size);
 	
 	auto end = std::chrono::system_clock::now();
     std::chrono::duration<double> time = end - start;
     
-	llindar_avg = llindar_avg / float(repeticions);
-	iteracions_avg = iteracions_avg / float(repeticions);
-	cout << "Després de " << repeticions << " execucions, el sistema percola de mitjana amb el llindar " << llindar_avg << " el bucle ha realitzat de mitjana " << iteracions_avg << " iteracions" << endl;
+	cout << "El sistema percola de mitjana amb el llindar " << llindar << " el bucle ha realitzat de mitjana " << iteracions << " iteracions" << endl;
 	cout << "Temps d'execució: " << time.count() * (10*10*10*10*10*10) << " microsegons " << endl;
 
 }
