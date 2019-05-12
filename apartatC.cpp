@@ -14,6 +14,7 @@
 #include <chrono>
 using namespace std;
 
+int iteracions = 0;
 
 class Graph{
     int n;
@@ -67,6 +68,7 @@ bool Graph::isReachable(int s, int d){
         s = queue.front();
         queue.pop_front();
         for(i = adj[s].begin(); i != adj[s].end(); ++i){
+			iteracions++;
             if(*i == d) return true;
             if(!visited[*i]){
                 visited[*i] = true;
@@ -118,31 +120,38 @@ float percolation(Graph &g, int n){
     
     srand(time(0));
     
-    while(g.isReachable(ori,des)){
-    v = rand()%n;
-    w = rand()%n;
-    // comprovar que aresta existeix
-    if(v != w and g.edgeExists(v,w)) {
-        g.deleteEdge(v,w);
-        ++count;
-    }
+    while(g.isReachable(ori,des)){		
+		v = rand()%n;
+		w = rand()%n;
+		// comprovar que aresta existeix
+		if(v != w and g.edgeExists(v,w)) {
+			g.deleteEdge(v,w);
+			++count;
+		}
     }
     return count;
 }
     
 
-int main(){
+int main(int argc, char *argv[]){
+    
+    if (argc < 2) {
+		cout << "Massa pocs arguments " << endl;
+		return -1;
+	}
     
     auto start = std::chrono::system_clock::now();
 
-    int n; // num nodes
-    cin >> n;
+    int n = atoi(argv[1]);
+
     float a = n*(n-1); // arestes totals
     
     Graph g(n);
     complete_graph(g,n);
     
-    g.printGraph();
+    /*cout << "Graf generat: " << endl;
+    
+    g.printGraph();*/
     
     float p = percolation(g,n); // p = num arestes random eliminades
     
@@ -150,7 +159,8 @@ int main(){
     std::chrono::duration<double> time = end - start;
     
     cout << "arestes eliminades: " << p << endl;
-    cout << "fraccio 1-p: " << setprecision(4) << p/a << endl;
-    cout << "temps d'execució: " << time.count() << "segons" << endl;
+    cout << "fraccio 1-p: " << setprecision(4) << p/a << endl;    
+    cout << "temps d'execució: " << time.count()* (10*10*10*10*10*10) << " microsegons" << endl;
+    cout << "Número d'iteracions de la funció percolation: " << iteracions << endl;
     
 }

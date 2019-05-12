@@ -3,6 +3,7 @@
 #include <vector>
 #include <time.h>
 #include <ctime>
+#include <chrono>
 #include <cstdlib>
 #include "apartatB.h"
 #include "quickUnion.h"
@@ -99,6 +100,8 @@ int main(int argc, char *argv[]){
 	4. sistema percola? (negatiu: tornem a punt 2)
 	5. la fracció de caselles obertes (respecte les totals) estima el llindar */
 	
+	auto start = std::chrono::system_clock::now();
+	
 	int size = atoi(argv[1]);
 	int repeticions = atoi(argv[2]);
 	Percolacio p = Percolacio(size);
@@ -125,8 +128,13 @@ int main(int argc, char *argv[]){
 		llindar_avg += llindar;
 		iteracions_avg += iteracions;
 	}
+	
+	auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> time = end - start;
+    
 	llindar_avg = llindar_avg / float(repeticions);
 	iteracions_avg = iteracions_avg / float(repeticions);
 	cout << "Després de " << repeticions << " execucions, el sistema percola de mitjana amb el llindar " << llindar_avg << " el bucle ha realitzat de mitjana " << iteracions_avg << " iteracions" << endl;
+	cout << "Temps d'execució: " << time.count() * (10*10*10*10*10*10) << " microsegons " << endl;
 
 }

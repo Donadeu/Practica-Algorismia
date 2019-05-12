@@ -24,7 +24,10 @@ public:
     void addEdge(int v, int w);
     void deleteEdge(int v, int w);
     bool edgeExists(int v, int w);
+    bool hamCicle(Graph g, int path[], int pos, int n);
+    bool isSafe(int v, Graph g, int path[], int pos);
     bool isReachable(int s, int d);
+    bool hamiltonian(Graph g, int n);
     void printGraph();
 };
 
@@ -98,13 +101,15 @@ void complete_graph(Graph &g, int n){
     }
 }
 
-bool hamiltonian(Graph g, int n){
-	int *path = new int[n];
-	for(int i = 0; i < n; i++) path[i] = -1;
-	// node 0 es el primer del cami
-	// si hi ha cicle hamiltonia, el cami pot començar a qualsevol punt
-	path[0] = 0; 
-	if(hamCicle(g,path,1,n) == false) return false;
+/* funcio per comprovar que el node v pot ser afegit al cami hamiltonia
+amn index pos */
+bool isSafe(int v, Graph g, int path[], int pos){
+	// mirar si node es adjacent al node previament afegit
+	if(!g.edgeExists(pos-1,v)) return false;
+	// mirar si node ja estava inclos
+	for(int i = 0; i < pos; i++){
+		if(path[i] == v) return false;
+	}
 	return true;
 }
 
@@ -131,17 +136,16 @@ bool hamCicle(Graph g, int path[], int pos, int n){
 	return false;
 }
 
-/* funcio per comprovar que el node v pot ser afegit al cami hamiltonia
-amn index pos */
-bool isSafe(int v, Graph g, int path[], int pos){
-	// mirar si node es adjacent al node previament afegit
-	if(!g.edgeExists(pos-1,v)) return false;
-	// mirar si node ja estava inclos
-	for(int i = 0; i < pos; i++){
-		if(path[i] == v) return false;
-	}
+bool hamiltonian(Graph g, int n){
+	int *path = new int[n];
+	for(int i = 0; i < n; i++) path[i] = -1;
+	// node 0 es el primer del cami
+	// si hi ha cicle hamiltonia, el cami pot començar a qualsevol punt
+	path[0] = 0; 
+	if(hamCicle(g,path,1,n) == false) return false;
 	return true;
 }
+
 	
     
 float percolation(Graph &g, int n){
@@ -160,37 +164,40 @@ float percolation(Graph &g, int n){
     srand(time(0));
     
     while(hamiltonian(g,n)){
-    v = rand()%n;
-    w = rand()%n;
-    // comprovar que aresta existeix
-    if(v != w and g.edgeExists(v,w)) {
-        g.deleteEdge(v,w);
-        ++count;
-    }
+		v = rand()%n;
+		w = rand()%n;
+		// comprovar que aresta existeix
+		if(v != w and g.edgeExists(v,w)) {
+			g.deleteEdge(v,w);
+			++count;
+		}
     }
     return count;
 }
 
-int main(){
+int main(int argc, char *argv[]){
     
     auto start = std::chrono::system_clock::now();
 
-    int n; // num nodes
-    cin >> n;
+    int n = atoi(argv[1]);
     float a = n*(n-1); // arestes totals
     
     Graph g(n);
     complete_graph(g,n);
     
-    g.printGraph();
+    /*cout << "Graf inicial: " << endl;
+    g.printGraph();*/
     
     float p = percolation(g,n); // p = num arestes random eliminades
+    
+    /*cout << "Graf després de percolation: " << endl;
+    g.printGraph();*/
     
     auto end = std::chrono::system_clock::now();
     std::chrono::duration<double> time = end - start;
     
     cout << "arestes eliminades: " << p << endl;
     cout << "fraccio 1-p: " << setprecision(4) << p/a << endl;
-    cout << "temps d'execució: " << time.count() << "segons" << endl;
+    cout << "temps d'execució: " << time.count()*(10*10*10*10*10*10) << " microsegons" << endl;
     
 }

@@ -154,7 +154,7 @@ int main(int argc, char *argv[]){
     
     cout << "arestes eliminades: " << p << endl;
     cout << "fraccio 1-p: " << setprecision(4) << p/a << endl;    
-    cout << "temps d'execució: " << time.count() << " segons" << endl;
+    cout << "temps d'execució: " << time.count()*(10*10*10*10*10*10) << " microsegons" << endl;
     //cout << "Número d'iteracions de la funció percolation: " << iteracions << endl;
     
 }
